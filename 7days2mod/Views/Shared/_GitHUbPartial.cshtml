@@ -1,0 +1,24 @@
+﻿@using System.Text;
+@using System.Configuration;
+@{string AvatarIMG = "<img src='" + Session["user_avatar"] + "' width='20' height='20' style='float:left;' />";}
+@{string AccessURL = "https://github.com/settings/connections/applications/" + ConfigurationManager.AppSettings["GitHubOAuthClientID"];}
+@if (Session["access_token"] != null)
+{
+    <ul class="nav navbar-nav navbar-right">
+        @if (Session["user_login"] != null)
+        { 
+        <li>
+            <a href="@Url.Action("Index", "Home")"><img src="@Session["user_avatar"]" width="20" height="20" style="float:left;" />@Session["user_login"]</a>
+        </li>
+        }
+        <li>
+            <a href="@AccessURL" target="_blank"><i class="glyphicon glyphicon-edit"></i> Authorization</a>
+        </li>
+    </ul>
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("GitHub Login", "Index", "Authenticate", new { return_url = Convert.ToBase64String(Encoding.UTF8.GetBytes(Request.Url.AbsoluteUri)) }, null)</li>
+    </ul>
+}
